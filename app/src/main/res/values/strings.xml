@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Snooker Scoreboard</string>
+    <string name="foul">Foul</string>
 </resources>
