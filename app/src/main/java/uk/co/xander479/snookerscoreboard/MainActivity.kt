@@ -65,7 +65,22 @@ fun SnookerScoreboardLayout() {
 }
 
 @Composable
-fun ScoreBug(modifier: Modifier = Modifier) {}
+fun ScoreBug(modifier: Modifier = Modifier) {
+  Row(
+    modifier = Modifier
+      .fillMaxWidth()
+      .background(Color.Blue), horizontalArrangement = Arrangement.SpaceAround
+  ) {
+    Row {
+      Text("Player 1")
+      Text("P1 Score")
+    }
+    Row {
+      Text("P2 Score")
+      Text("Player 2")
+    }
+  }
+}
 
 @Composable
 fun PointsButton(pointsValue: Int, modifier: Modifier = Modifier) {
