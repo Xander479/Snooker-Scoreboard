@@ -56,10 +56,20 @@ fun SnookerScoreboardLayout() {
 
   val onPointsButtonPress = { pointsValue: Int ->
     if(isPlayer1Turn) {
-      if(isFoul) player2Score += pointsValue else player1Score += pointsValue
+      if(isFoul) {
+        player2Score += pointsValue
+        isPlayer1Turn = !isPlayer1Turn
+        isFoul = false
+      }
+      else player1Score += pointsValue
     }
     else {
-      if(isFoul) player1Score += pointsValue else player2Score += pointsValue
+      if(isFoul) {
+        player1Score += pointsValue
+        isPlayer1Turn = !isPlayer1Turn
+        isFoul = false
+      }
+      else player2Score += pointsValue
     }
   }
 
@@ -76,7 +86,7 @@ fun SnookerScoreboardLayout() {
       isPlayer1Turn,
       onclick = { isPlayer1Turn = !isPlayer1Turn })
     Spacer(modifier = Modifier.padding(vertical = 15.dp))
-    Button(onClick = { /*TODO*/ }) {
+    Button(onClick = { isFoul = !isFoul }) {
       Text(stringResource(R.string.foul))
     }
     PointsButton(1, onPointsButtonPress)
