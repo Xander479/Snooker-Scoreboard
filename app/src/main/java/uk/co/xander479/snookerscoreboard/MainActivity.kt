@@ -4,7 +4,6 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -15,12 +14,16 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -45,6 +48,21 @@ class MainActivity: ComponentActivity() {
 
 @Composable
 fun SnookerScoreboardLayout() {
+  var player1Score by remember { mutableIntStateOf(0) }
+  var player2Score by remember { mutableIntStateOf(0) }
+
+  var isPlayer1Turn by remember { mutableStateOf(true) }
+  var isFoul by remember { mutableStateOf(false) }
+
+  val onPointsButtonPress = { pointsValue: Int ->
+    if(isPlayer1Turn) {
+      if(isFoul) player2Score += pointsValue else player1Score += pointsValue
+    }
+    else {
+      if(isFoul) player1Score += pointsValue else player2Score += pointsValue
+    }
+  }
+
   Column(
     modifier = Modifier
       .statusBarsPadding()
@@ -52,20 +70,24 @@ fun SnookerScoreboardLayout() {
     horizontalAlignment = Alignment.CenterHorizontally,
     verticalArrangement = Arrangement.Center
   ) {
-    ScoreBug()
+    ScoreBug(player1Score, player2Score)
     Spacer(modifier = Modifier.padding(vertical = 15.dp))
     Button(onClick = { /*TODO*/ }) {
       Text(stringResource(R.string.foul))
     }
-    PointsButton(1)
-    PointsButtonRow(2, 3)
-    PointsButtonRow(4, 5)
-    PointsButtonRow(6, 7)
+    PointsButton(1, onPointsButtonPress)
+    PointsButtonRow(2, 3, onPointsButtonPress)
+    PointsButtonRow(4, 5, onPointsButtonPress)
+    PointsButtonRow(6, 7, onPointsButtonPress)
   }
 }
 
 @Composable
-fun ScoreBug(modifier: Modifier = Modifier) {
+fun ScoreBug(
+  player1Score: Int,
+  player2Score: Int,
+  modifier: Modifier = Modifier
+) {
   Row(
     modifier = Modifier
       .fillMaxWidth()
@@ -73,27 +95,36 @@ fun ScoreBug(modifier: Modifier = Modifier) {
   ) {
     Row {
       Text("Player 1")
-      Text("P1 Score")
+      Text(player1Score.toString())
     }
     Row {
-      Text("P2 Score")
+      Text(player2Score.toString())
       Text("Player 2")
     }
   }
 }
 
 @Composable
-fun PointsButton(pointsValue: Int, modifier: Modifier = Modifier) {
-  Button(onClick = { /*TODO*/ }) {
+fun PointsButton(
+  pointsValue: Int,
+  onclick: (Int) -> Unit,
+  modifier: Modifier = Modifier
+) {
+  Button(onClick = { onclick(pointsValue) }) {
     Text(pointsValue.toString())
   }
 }
 
 @Composable
-fun PointsButtonRow(firstButton: Int, secondButton: Int, modifier: Modifier = Modifier) {
+fun PointsButtonRow(
+  firstButton: Int,
+  secondButton: Int,
+  onclick: (Int) -> Unit,
+  modifier: Modifier = Modifier
+) {
   Row {
-    PointsButton(firstButton)
-    PointsButton(secondButton)
+    PointsButton(firstButton, onclick)
+    PointsButton(secondButton, onclick)
   }
 }
 
