@@ -70,7 +70,11 @@ fun SnookerScoreboardLayout() {
     horizontalAlignment = Alignment.CenterHorizontally,
     verticalArrangement = Arrangement.Center
   ) {
-    ScoreBug(player1Score, player2Score)
+    ScoreBug(
+      player1Score,
+      player2Score,
+      isPlayer1Turn,
+      onclick = { isPlayer1Turn = !isPlayer1Turn })
     Spacer(modifier = Modifier.padding(vertical = 15.dp))
     Button(onClick = { /*TODO*/ }) {
       Text(stringResource(R.string.foul))
@@ -86,16 +90,23 @@ fun SnookerScoreboardLayout() {
 fun ScoreBug(
   player1Score: Int,
   player2Score: Int,
+  isPlayer1Turn: Boolean,
+  onclick: () -> Unit,
   modifier: Modifier = Modifier
 ) {
   Row(
     modifier = Modifier
       .fillMaxWidth()
-      .background(Color.Blue), horizontalArrangement = Arrangement.SpaceAround
+      .background(Color.Blue),
+    horizontalArrangement = Arrangement.SpaceAround,
+    verticalAlignment = Alignment.CenterVertically
   ) {
     Row {
       Text("Player 1")
       Text(player1Score.toString())
+    }
+    Button(onClick = onclick) {
+      if(isPlayer1Turn) Text("P1") else Text("P2")
     }
     Row {
       Text(player2Score.toString())
