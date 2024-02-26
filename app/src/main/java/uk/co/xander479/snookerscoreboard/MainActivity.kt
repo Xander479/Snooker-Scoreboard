@@ -58,7 +58,7 @@ fun SnookerScoreboardLayout() {
     if(isPlayer1Turn) {
       if(isFoul) {
         player2Score += pointsValue
-        isPlayer1Turn = !isPlayer1Turn
+        isPlayer1Turn = false
         isFoul = false
       }
       else player1Score += pointsValue
@@ -66,7 +66,7 @@ fun SnookerScoreboardLayout() {
     else {
       if(isFoul) {
         player1Score += pointsValue
-        isPlayer1Turn = !isPlayer1Turn
+        isPlayer1Turn = true
         isFoul = false
       }
       else player2Score += pointsValue
